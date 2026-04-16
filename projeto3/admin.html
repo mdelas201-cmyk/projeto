@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Iron Admin | Banco de Dados</title>
+    <style>
+        :root { --primary: #e74c3c; --bg: #121212; }
+        body { font-family: sans-serif; background: var(--bg); color: white; padding: 30px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; background: #1e1e1e; }
+        th, td { padding: 15px; border: 1px solid #333; text-align: left; }
+        th { background: var(--primary); color: white; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-del { background: #c0392b; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Gestão de Alunos</h1>
+        <button onclick="localStorage.removeItem('alunos'); location.reload();" style="background:none; color: #555; border: 1px solid #333; padding: 8px; cursor: pointer;">Limpar Tudo</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Idade/Data</th>
+                <th>PCD</th>
+                <th>Saúde</th>
+            </tr>
+        </thead>
+        <tbody id="lista"></tbody>
+    </table>
+
+    <script>
+        const alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+        const lista = document.getElementById('lista');
+        
+        if(alunos.length === 0) {
+            lista.innerHTML = '<tr><td colspan="5" style="text-align:center">Nenhum registro encontrado.</td></tr>';
+        } else {
+            alunos.forEach(a => {
+                lista.innerHTML += `
+                    <tr>
+                        <td>#${a.id}</td>
+                        <td>${a.nome}</td>
+                        <td>${a.data}</td>
+                        <td>${a.pcd.toUpperCase()}</td>
+                        <td>${a.saude}</td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Admin | Login Restrito</title>
+    <style>
+        :root { --primary: #e74c3c; --bg: #000000; --card: #1a1a1a; --text: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+
+        .login-card { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 12px; 
+            border: 1px solid #333; 
+            width: 100%;
+            max-width: 350px; 
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.1);
+        }
+
+        h2 { color: var(--primary); margin-bottom: 10px; letter-spacing: 2px; }
+        p { font-size: 0.8rem; color: #666; margin-bottom: 25px; }
+
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 15px; 
+            background: #080808; 
+            border: 1px solid #333; 
+            color: white; 
+            border-radius: 6px; 
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background: var(--primary); 
+            border: none; 
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #c0392b; transform: scale(1.02); }
+
+        .back-link { margin-top: 20px; display: block; color: #444; font-size: 0.75rem; text-decoration: none; }
+        .back-link:hover { color: #888; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h2>ADMIN PORTAL</h2>
+        <p>AUTENTICAÇÃO OBRIGATÓRIA</p>
+        
+        <form id="admin-form">
+            <input type="text" id="admin-user" placeholder="Usuário Admin" required>
+            <input type="password" id="admin-pass" placeholder="Senha Mestra" required>
+            <button type="submit">Acessar Sistema</button>
+        </form>
+
+        <a href="../projeto1/index.html" class="back-link">Voltar para a Área de Alunos</a>
+    </div>
+
+    <script>
+        // DEFINA AQUI A SUA SENHA PADRÃO FIXA
+        const USUARIO_MESTRE = "admin";
+        const SENHA_MESTRA = "iron123"; // Altere para a senha que você desejar
+
+        document.getElementById('admin-form').onsubmit = function(e) {
+            e.preventDefault();
+
+            const user = document.getElementById('admin-user').value;
+            const pass = document.getElementById('admin-pass').value;
+
+            // Comparação direta com os valores fixos
+            if (user === USUARIO_MESTRE && pass === SENHA_MESTRA) {
+                // Salva uma "chave" temporária para dizer que o admin está logado
+                sessionStorage.setItem('adminLogado', 'true');
+                
+                alert("Acesso autorizado!");
+                window.location.href = "admin.html";
+            } else {
+                alert("ACESSO NEGADO! Credenciais incorretas.");
+            }
+        };
+    </script>
+</body>
+</html>
