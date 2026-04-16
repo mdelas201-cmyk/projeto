@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Fitness | Acesso</title>
+    <style>
+        :root { --primary: #e74c3c; --bg: #121212; --card: #1e1e1e; --text: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+        }
+        .container { background: var(--card); padding: 35px; border-radius: 15px; width: 100%; max-width: 400px; border-top: 5px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        h1 { letter-spacing: 3px; margin-bottom: 25px; font-weight: 800; }
+        .tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid #333; }
+        .tab { flex: 1; padding: 12px; cursor: pointer; color: #888; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
+        .tab.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
+        form { display: none; flex-direction: column; gap: 15px; }
+        form.active { display: flex; }
+        input, select { width: 100%; padding: 12px; background: #2b2b2b; border: 1px solid #444; color: white; border-radius: 6px; outline: none; }
+        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn:hover { background: #c0392b; }
+        .admin-link { margin-top: 20px; display: block; color: #555; font-size: 0.7rem; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>IRON FITNESS</h1>
+        <div class="tabs">
+            <div id="tab-login" class="tab active" onclick="toggleForm('login')">LOGIN</div>
+            <div id="tab-register" class="tab" onclick="toggleForm('register')">CADASTRO</div>
+        </div>
+
+        <form id="login-form" class="active">
+            <input type="text" id="login-user" placeholder="Nome de Usuário" required>
+            <input type="password" id="login-pass" placeholder="Senha" required>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+
+        <form id="register-form">
+            <input type="text" id="reg-nome" placeholder="Nome Completo" required>
+            <input type="date" id="reg-data" required>
+            <select id="reg-pcd" onchange="document.getElementById('pcd-ext').style.display = this.value=='sim'?'block':'none'">
+                <option value="nao">PCD: Não</option>
+                <option value="sim">PCD: Sim</option>
+            </select>
+            <input type="text" id="pcd-ext" placeholder="Qual deficiência?" style="display:none">
+            <input type="text" id="reg-saude" placeholder="Saúde (Alergias/Lesões)">
+            <input type="password" id="reg-senha" placeholder="Criar Senha" required>
+            <button type="submit" class="btn">Cadastrar</button>
+        </form>
+
+        <a href="../projeto3/admin_login.html" class="admin-link">Acesso Administrativo</a>
+    </div>
+
+    <script>
+        // 1. Função de troca de abas (Global)
+        function toggleForm(type) {
+            const loginForm = document.getElementById('login-form');
+            const regForm = document.getElementById('register-form');
+            const tabLogin = document.getElementById('tab-login');
+            const tabReg = document.getElementById('tab-register');
+
+            if (type === 'login') {
+                loginForm.classList.add('active');
+                regForm.classList.remove('active');
+                tabLogin.classList.add('active');
+                tabReg.classList.remove('active');
+            } else {
+                loginForm.classList.remove('active');
+                regForm.classList.add('active');
+                tabLogin.classList.remove('active');
+                tabReg.classList.add('active');
+            }
+        }
+
+        // 2. Configurações de envio (Esperar carregar)
+        window.onload = function() {
+            const lForm = document.getElementById('login-form');
+            const rForm = document.getElementById('register-form');
+
+            // Lógica de Cadastro
+            if(rForm) {
+                rForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    const aluno = {
+                        nome: document.getElementById('reg-nome').value,
+                        data: document.getElementById('reg-data').value,
+                        pcd: document.getElementById('reg-pcd').value,
+                        saude: document.getElementById('reg-saude').value || "Nenhuma",
+                        senha: document.getElementById('reg-senha').value
+                    };
+
+                    let lista = JSON.parse(localStorage.getItem('alunos')) || [];
+                    lista.push(aluno);
+                    localStorage.setItem('alunos', JSON.stringify(lista));
+                    
+                    alert("Cadastro realizado com sucesso!");
+                    toggleForm('login');
+                };
+            }
+
+            // Lógica de Login
+            if(lForm) {
+                lForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    const userVal = document.getElementById('login-user').value;
+                    const passVal = document.getElementById('login-pass').value;
+
+                    const lista = JSON.parse(localStorage.getItem('alunos')) || [];
+                    const encontrado = lista.find(a => a.nome === userVal && a.senha === passVal);
+
+                    if (encontrado) {
+                        localStorage.setItem('usuarioLogado', JSON.stringify(encontrado));
+                        window.location.href = "../projeto2/dashboard.html";
+                    } else {
+                        alert("Usuário ou Senha incorretos!");
+                    }
+                };
+            }
+        };
+    </script>
+</body>
+</html>
